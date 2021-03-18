@@ -95,6 +95,7 @@ cd /docker/mina
 cp m.conf.example m.conf
 cp etc/mainnet/daemon.json.example etc/mainnet/daemon.json
 cp etc/devnet/daemon.json.example etc/devnet/daemon.json # If you going to use devnet container
+chmod 700 keys/ # This is important
 ```
 
 Open `m.conf` config file using editor, e,g:

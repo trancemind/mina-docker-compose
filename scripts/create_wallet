@@ -7,6 +7,7 @@ root_dir=`dirname "${wdir}"`
 key_dir="${root_dir}/keys"
 
 clear
+chmod 700 "${key_dir}"
 
 echo -n "Enter your wallet name (or press enter for default 'my-wallet'): "
 read wallet_name
