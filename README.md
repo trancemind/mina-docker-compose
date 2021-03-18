@@ -4,7 +4,8 @@ Project URL: [mina.run](https://mina.run/)
 
 -----
     Inspired by Mina - the world's lightest blockchain | minaprotocol.com
-    Send some candies if you found this helpful: B62qrQ4m3KNeNBsC86AW1vyXxEs32NbG2pDA2mdvCq5erxLqftVyZTj
+    Send some candies if you found this helpful to author's wallet:
+    B62qrQ4m3KNeNBsC86AW1vyXxEs32NbG2pDA2mdvCq5erxLqftVyZTj
 -----
 
 This project was born due to desire to have a quick and easy mina daemon installation way and make a mina node launch as easy as possible. [The official documentation](https://minaprotocol.com/docs/connecting) is clear for technicians, but sometimes it's a bit hard to figure out for those who never worked with Linux and Docker what to do there.
