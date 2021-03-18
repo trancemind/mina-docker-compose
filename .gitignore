@@ -1,0 +1,15 @@
+m.conf
+/etc/devnet/*
+/etc/mainnet/*
+!/etc/devnet/daemon.json.example
+!/etc/mainnet/daemon.json.example
+/keys/*
+!/keys/.keep
+/.mina-config/devnet/*
+/.mina-config/mainnet/*
+!/.mina-config/devnet/.keep
+!/.mina-config/mainnet/.keep
+/db/*
+!/db/.keep
+/etc/postgresql/*
+!/etc/postgresql/.keep

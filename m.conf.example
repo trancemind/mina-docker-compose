@@ -1,0 +1,55 @@
+#
+# minaprotocol docker-compose configuration
+#
+
+TZ=UTC
+SERVER_HOSTNAME=localhost
+COMPOSE_PROJECT_NAME=mina
+#COMPOSE_PROFILES=mainnet,mainnet-archive,devnet,devnet-archive,database           # Here is all possible profiles list. Depending to what profiles selected, docker would run containers.
+COMPOSE_PROFILES=mainnet                                                           # If you don't need devnet, archive+database nodes, leave this line as is.
+LOG_LEVEL=Info                                                                     # You can set: Spam|Trace|Debug|Info|Warn|Error|Faulty_peer|Fatal
+
+MINA_TAG_DEV=1.0.5-68200c7                                                         # ## Change version tags once the software got updates
+MINA_TAG_MAIN=1.1.3-48401e9                                                        # Ref: https://hub.docker.com/r/minaprotocol/mina-archive/tags?page=1&ordering=last_updated
+MINA_TAG_ARCH=1.1.3-48401e9                                                        # ##
+
+MINA_PUBLIC_KEY=[YOUR_PUBLIC_KEY_HERE]                                             ### SETUP YOUR MINA PUBLIC KEY
+MINA_PRIVKEY_PASS=[YOUR_PRIVATE_KEY_PASSWORD_DONT_USE_SPECIAL_CHARS]               ### SETUP PASSWORD FOR YOUR MINA PRIVATE KEY
+COINBASE_PUBLIC_KEY=${MINA_PUBLIC_KEY}                                             # You can change this, if you won't to send BP rewards to external wallet
+WALLET_NAME=my-wallet                                                              # Name of the mina wallet file
+
+MINA_PUBlIC_IP=[SERVER_EXTERNAL_IP]                                                # It's important to point your public (external) IP address, when you're running Mina behind NAT, e.g., in the Google Cloud
+MINA_BIND_IP=0.0.0.0                                                               # It must be 0.0.0.0/0 in the docker container
+
+MINA_PORT_DEV=18302                                                                # You can change port numbers depending to your needs.
+MINA_PORT_MAIN=8302                                                                # However, if you going to change GraphQL port (MINA_PORT_GQL),
+MINA_PORT_ARCH=3086                                                                # then you have to change it in the Sidecar confing file
+MINA_PORT_GQL=20302                                                                # See: ./etc/sidecar/mina-sidecar-config.json
+
+SNARK_FEE=1.000000024                                                              # Set your own snark worker fee in the format as shown in the example.
+
+POSTGRES_ROOT="SOME_RANDOM_PASSWORD_BUT_YOU_CAN_LEAVE_THIS_UNCHANGED"
+POSTGRES_PORT="127.0.0.1:5432"
+
+MINA_PEER_LIST_MAIN="https://storage.googleapis.com/seed-lists/mainnet_seeds.txt"  # Most likely you won't be needed to change these two lines
+MINA_PEER_LIST_DEV="https://storage.googleapis.com/seed-lists/devnet_seeds.txt"    #
+
+###                                                ###
+### STOP EDITING HERE, UNLESS YOU KNOW WHAT TO DO! ###
+###                                                ###
+
+MAX_CONNECTIONS=50
+PEER_EXCHANGE=true
+GENESIS_PROOF=false
+SNARK_THREAD=1
+
+DAEMON_OPTS_MAINNET="--config-file /root/.mina-config/daemon.json --peer-list-url ${MINA_PEER_LIST_MAIN} --max-connections ${MAX_CONNECTIONS} --bind-ip ${MINA_BIND_IP} --external-ip ${MINA_PUBlIC_IP} --external-port ${MINA_PORT_MAIN} --enable-mina-peer-exchange ${PEER_EXCHANGE} --block-producer-key /keys/${WALLET_NAME} --coinbase-receiver ${COINBASE_PUBLIC_KEY} --run-snark-worker ${MINA_PUBLIC_KEY} --snark-worker-fee ${SNARK_FEE} --snark-worker-parallelism ${SNARK_THREAD} --work-reassignment-wait 420000 --work-selection seq --archive-address archive-mainnet:${MINA_PORT_ARCH} --insecure-rest-server --open-limited-graphql-port --limited-graphql-port ${MINA_PORT_GQL} --generate-genesis-proof ${GENESIS_PROOF} --file-log-level ${LOG_LEVEL}"
+DAEMON_OPTS_DEVNET="--config-file /root/.mina-config/daemon.json --peer-list-url ${MINA_PEER_LIST_DEV} --max-connections ${MAX_CONNECTIONS} --bind-ip ${MINA_BIND_IP} --external-ip ${MINA_PUBlIC_IP} --external-port ${MINA_PORT_DEV} --enable-mina-peer-exchange ${PEER_EXCHANGE} --block-producer-key /keys/${WALLET_NAME} --coinbase-receiver ${COINBASE_PUBLIC_KEY} --run-snark-worker ${MINA_PUBLIC_KEY} --snark-worker-fee ${SNARK_FEE} --snark-worker-parallelism ${SNARK_THREAD} --work-reassignment-wait 420000 --work-selection seq --archive-address archive-devnet:${MINA_PORT_ARCH} --insecure-rest-server --open-limited-graphql-port --limited-graphql-port ${MINA_PORT_GQL} --generate-genesis-proof true --file-log-level Debug"
+DAEMON_OPTS_MAINNET_ARCHIVE="--postgres-uri postgres://postgres:${POSTGRES_ROOT}@db:5432/mina_archive_mainnet --server-port ${MINA_PORT_ARCH} --metrics-port 3085 --log-level ${LOG_LEVEL}"
+DAEMON_OPTS_DEVNET_ARCHIVE="--postgres-uri postgres://postgres:${POSTGRES_ROOT}@db:5432/mina_archive_devnet --server-port ${MINA_PORT_ARCH} --metrics-port 3085 --log-level Debug"
+
+IPV4_NETWORK=172.25.0
+SYSCTL_IPV6_DISABLED=1
+
+MINA_LOG_MAX_FILE=10
+MINA_LOG_MAX_SIZE=10m
