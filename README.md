@@ -64,25 +64,26 @@ Assuming you're going to store your docker-compose project in the folder `/docke
 mkdir /docker
 git clone https://github.com/trancemind/mina-docker-compose /docker/mina
 ```
-If you don't have installed `git` utility, you should install it first. 
+If you don't have installed `git` utility, you should install it first.
 
-For Debian/Ubuntu:
-
-```
-apt install git
-```
-
-Before to start Mina daemon first time, make sure that your have created new wallet and you have a public/private key pair in the folder `keys/`:
+For Debian/Ubuntu Linux:
 
 ```
-cd /docker/mina
-docker run  --interactive --tty --rm \
-            --volume `pwd`/keys:/keys minaprotocol/generate-keypair:1.0.2-06f3c5c \
-            -privkey-path /keys/my-wallet
-chmod 700 keys/            
-chmod 600 keys/my-wallet
+apt -y install git
+```
+For CentOS/RedHat Linux:
+
+```
+yum -y install git
 ```
 
+Before to start Mina daemon, make sure that your have created a mina wallet and so you have a public/private key pair in the folder `keys/`.
+
+You can use a `create_wallet` script from the `scripts/` folder to generate a new wallet. Simply launch it in the terminal:
+
+```
+/docker/mina/scripts/create_wallet
+```
 During the wallet creation, type your password for the private key. Don't use special chars to avoid any weird docker's error. Once the wallet created, write down your public key and don't forget your private key password.
 
 Alternatively you may want to use your existing wallet. In this case, you have to upload your public and private key files in the docker-compose folder `keys/`.
@@ -176,7 +177,6 @@ mina accounts import -privkey-path /keys/my-wallet
 mina account unlock --public-key $MINA_PUBLIC_KEY
 mina client set-snark-work-fee 2.000000000
 ```
-
 and so on.
 
 ----
