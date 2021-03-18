@@ -1,0 +1,30 @@
+#!/bin/bash
+
+MINA_GENKEY_VERSION="1.0.2-06f3c5c"
+
+wdir=`dirname "$(realpath "$0")"`
+root_dir=`dirname "${wdir}"`
+key_dir="${root_dir}/keys"
+
+clear
+
+echo -n "Enter your wallet name (or press enter for default 'my-wallet'): "
+read wallet_name
+
+if [[ ${wallet_name} == "" ]]; then
+ wallet_name="my-wallet"
+fi
+
+if [[ -f "${key_dir}/${wallet_name}" ]]; then
+ echo "Wallet '${wallet_name}' already exists."
+ echo "Please, choose another name or remove existing one."
+ exit 0
+fi
+
+echo "Downloading docker image minaprotocol/generate-keypair"
+docker pull --quiet minaprotocol/generate-keypair:${MINA_GENKEY_VERSION}
+echo "Generating keys for wallet '${wallet_name}'."
+docker run --interactive --tty --rm \
+           --volume ${key_dir}:/keys minaprotocol/generate-keypair:${MINA_GENKEY_VERSION} \
+           --privkey-path /keys/${wallet_name}
+echo "Congratulations! You have created your Mina wallet!"
