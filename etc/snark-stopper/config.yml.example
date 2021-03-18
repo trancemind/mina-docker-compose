@@ -1,0 +1,27 @@
+# Setup your mina public key, configured for snark worker
+# See MINA_PUBLIC_KEY in m.conf
+WORKER_PUB_KEY: YOUR_PUBLIC_KEY
+
+# Setup your snark worker fee
+# Value specified in MINA
+# 1 MINA = 1,000,000,000 nanomina
+# examples 0.25 MINA = 250000000 nanomina
+# Make sure that the value is equal to SNARK_FEE in the m.conf
+WORKER_FEE: 1.000000024
+
+# how often to check `next proposal time` (seconds)
+CHECK_PERIOD_SEC: 180
+
+# the period after which the worker will be started again (minutes)
+STOP_WORKER_FOR_MIN: 15
+
+# how many minutes before 'next proposal' the worker will be turned off (minutes)
+STOP_WORKER_BEFORE_MIN: 10
+
+# ip address of graphql api
+# Don't change this!
+GRAPHQL_HOST: m-main.local
+
+# graphql port
+# Must be equal to MINA_PORT_GQL in the m.conf
+GRAPHQL_PORT: 20302

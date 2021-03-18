@@ -150,6 +150,27 @@ services:
           - sidecar
           - sidecar.local
 
+  mainnet_snark_stopper:
+    profiles: ["snark-stopper"]
+    depends_on:
+      - mainnet
+    image: c29r3/snark-stopper:latest
+    volumes:
+      - ./etc/snark-stopper/config.yml:/mina/config.yml:ro
+      - ./logs/snark_stopper.log:/mina/snark_stopper.log:rw
+    restart: always
+    logging:
+      options:
+        max-size: ${MINA_LOG_MAX_SIZE:-4m}
+        max-file: ${MINA_LOG_MAX_FILE:-10}
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=${SYSCTL_IPV6_DISABLED:-0}
+    networks:
+      m_net:
+        aliases:
+          - sw-stopper
+          - sw-stopper.local
+
 networks:
   m_net:
     driver: bridge

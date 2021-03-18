@@ -13,3 +13,7 @@ m.conf
 !/db/.keep
 /etc/postgresql/*
 !/etc/postgresql/.keep
+/etc/snark-stopper/*
+!/etc/snark-stopper/config.yml.example
+/logs/*
+!/logs/.keep
