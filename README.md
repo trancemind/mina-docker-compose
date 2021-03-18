@@ -1,10 +1,13 @@
-## Mina | daemon, archiver, database and sidecar All-In-One
+# minaprotocol | daemon, archiver, database, sidecar + extra tools All-In-One
+
+Project URL: [mina.run](https://mina.run/)
+
 -----
     Inspired by Mina - the world's lightest blockchain | minaprotocol.com
-    To send some candies for author: B62qrQ4m3KNeNBsC86AW1vyXxEs32NbG2pDA2mdvCq5erxLqftVyZTj
+    Send some candies if you found this helpful: B62qrQ4m3KNeNBsC86AW1vyXxEs32NbG2pDA2mdvCq5erxLqftVyZTj
 -----
 
-The idea was to create pure and clear Mina docker-compose package came in mind due to inspiration make the mina daemon installation easy as much as possible. [The official documentation](https://minaprotocol.com/docs/connecting) is clear for technicians, but sometimes it's not easy to figure out for those who never worked with Linux and Docker what to do there.
+This project was born due to desire to have a quick and easy mina daemon installation way and make a mina node launch as easy as possible. [The official documentation](https://minaprotocol.com/docs/connecting) is clear for technicians, but sometimes it's a bit hard to figure out for those who never worked with Linux and Docker what to do there.
 
 Since Mina engineers provided a docker build of all Mina's parts, we'll make the installation as easy as pie.  The docker-compose in this repo contains everything that need to run Mina daemon successfully with no pain.
 
@@ -17,7 +20,7 @@ Using provided `docker-compose.yml` it's possible to launch:
 
 Note: for both networks (mainnet and devnet) there is used same wallet (key file) being used in the folder `keys/`. If need, to use different keys, it's possible to separate the `keys/` folder, e.g.: `keys/devnet/` and `keys/mainnet/`.
 
-### Prerequisites
+## Prerequisites
 
 As stated [in the official documentation](https://minaprotocol.com/docs/getting-started), to run mina node we have to acquire a Linux server box, with:
 
@@ -36,7 +39,7 @@ On the first stage, if your server has no installed **docker** and **docker-comp
 
 If you're connected to the server ssh terminal as regular (non-root) user, then become root with `sudo -i` and then proceed.
 
-#### Docker installation
+## Docker installation
 
 Run these commands from terminal in order to install Docker:
 
@@ -46,7 +49,7 @@ systemctl enable docker.service
 systemctl start docker.service
 ```
 
-#### Docker-compose installation
+## Docker-compose installation
 
 Run these commands from terminal in order to install Docker-compose:
 
@@ -56,7 +59,7 @@ chmod +x /usr/local/bin/docker-compose
 ```
 Note: currently the most recent version of docker-compose is 1.28.5. Later it may become updated. However, provided docker-compose.yml is fine with current version.
 
-#### Mina installation
+## Mina installation
 
 Assuming you're going to store your docker-compose project in the folder `/docker/mina`, run the next commands:
 
@@ -149,7 +152,7 @@ docker-compose logs -f
 ```
 Press Crtl-C to interrupt the docker-compose task and return back to the server shell.
 
-#### How to use mina in the docker
+## How to use mina in the docker
 
 While using docker, you can either execute from terminal `docker-compose exec [container_name] bash` in order to login inside container to perform further operations or you can send commands to the mina client via `docker-compose exec [container_name] mina client [SUBCOMMAND]`. It's up to you what is more handy.
 
@@ -181,10 +184,69 @@ mina client set-snark-work-fee 2.000000000
 and so on.
 
 ----
+## Extra scripts
 
-#### Known issues
+**[mina-snark-stopper](https://github.com/c29r3/mina-snark-stopper)** - useful script, created by [Staketab.com](https://staketab.com), purposed to stop and start snark worker when needed.
 
-##### Mina Sidecar
+> This tool can be useful for Mina validators who run node at same time as block producer and snark worker. 
+> Worker can take up all processor time, which negatively affects block producer. 
+> When less than STOP_WORKER_BEFORE_MIN minutes remain before the next proposal, the script disconnects the worker and starts it after STOP_WORKER_FOR_MIN minutes.
+
+This tool now integrated with mina-docker-compose and you can run this as additional container in the bundle.
+
+#### mina-snark-stopper installation
+
+This tool is disabled by default. To enable, you should add additional profile in the `m.conf`. In the line `COMPOSE_PROFILES=` add additional profile `snark-stopper`, separated by comma. It may look like this:
+
+```
+COMPOSE_PROFILES=mainnet,snark-stopper
+```
+Create mina-snark-stopper configuration file:
+
+```
+cp etc/snark-stopper/config.yml.example etc/snark-stopper/config.yml
+```
+Change few options in the `etc/snark-stopper/config.yml`
+
+- `WORKER_PUB_KEY` - set your mina public key. The key must be equal to `MINA_PUBLIC_KEY` in the `m.conf`
+- `WORKER_FEE` - set your snark worker fee. This value worth to keep the same as `SNARK_FEE` in the `m.conf`
+- Make sure that the `GRAPHQL_PORT` is equal to `MINA_PORT_GQL` in the `m.conf`. Otherwise mina-snark-stopper won't be able to connect to your mina daemon.
+- Change other values at your discretion.
+
+Finally, create empty log file:
+
+```
+touch logs/snark_stopper.log && chmod 666 logs/snark_stopper.log
+```
+Run mina-snark-stopper:
+
+```
+docker-compose up -d
+```
+Check container logs after launch:
+
+```
+docker-compose logs -f --tail=10 mainnet_snark_stopper
+```
+The output should be similar to this:
+
+```
+Attaching to mina_mainnet_snark_stopper_1
+mainnet_snark_stopper_1  | version 1.2.5
+mainnet_snark_stopper_1  | |2021-03-18 23:08:08,758| Snark-stopper launched
+mainnet_snark_stopper_1  | Worker public key:  B62qrGej6d5bZiMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+mainnet_snark_stopper_1  | Worker fee:         1000000024
+mainnet_snark_stopper_1  | Check period(sec):  180
+mainnet_snark_stopper_1  | Stop before(min):   10
+mainnet_snark_stopper_1  | https://github.com/c29r3/mina-snark-stopper
+mainnet_snark_stopper_1  | http://staketab.com/
+mainnet_snark_stopper_1  |
+mainnet_snark_stopper_1  | |2021-03-18 23:08:08,842| 🙀 No proposal in this epoch
+```
+
+## Known issues
+
+### Mina Sidecar
 
 Sidecar is not launching successfully right after the first start, when the .mina-config folder is not yet synced, and doesn't contain reliable data from the network. When launching sidecar first time you can see errors:
 
@@ -202,16 +264,15 @@ mainnet_sidecar_1  | Exception: Response seems to be an error! {"errors":[{"mess
 mainnet_sidecar_1  | ERROR:root:Sleeping for 30s and trying again
 ```
 
-To fix this you just have to wait untill mina daemon got its first "Synced" status. Check the status like this:
+To fix this you just have to wait until mina daemon got its first "Synced" status. Check the status like this:
 
 ```
 docker-compose exec mainnet mina client status | egrep "^Sync status:"
 ```
-
 Once you get:
 
 ```
-Sync status:                                   Synced
+Sync status: Synced
 ```
 You should **restart sidecar**:
 
@@ -234,18 +295,18 @@ mainnet_sidecar_1  | INFO:root:Finished! New tip 517...
 ```
 This meaning your sidecar is working successfully.
 
-#### Still need a help?
+## Still need a help?
 
 If you faced with any problem while running this docker-compose, you can ping me in the [Mina Discord](https://bit.ly/MinaDiscord) by ID: `MaxTM#6793` and I'll try to help you to sort it out. Additionally, you can request for a help with Linux server initial setup for Mina node.
 
-#### References
+## References
 
 - [Keypair generation](https://minaprotocol.com/docs/keypair)
 - [Connect to the Network](https://minaprotocol.com/docs/connecting)
 - [Archive Node](https://minaprotocol.com/docs/advanced/archive-node)
 - [Node Status Reporting](https://minaprotocol.com/docs/advanced/node-status)
 
-#### Donate
+## Donate
 
 If you found this project helpful and this docker-compose package has saved a lot hours for you, please, consider some Mina donations for the author. You can just send few minas to:
 
