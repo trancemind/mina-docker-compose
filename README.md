@@ -15,6 +15,24 @@ Project URL: [mina.run](https://mina.run/)
     B62qrQ4m3KNeNBsC86AW1vyXxEs32NbG2pDA2mdvCq5erxLqftVyZTj
 -----
 
+## Table of contents
+
+* [Prerequisites](#prerequisites)
+* [Docker installation](#docker-installation)
+* [Docker-compose installation](#docker-compose-installation)
+* [Mina node installation](#mina-node-installation)
+* [How to use mina in the docker](#how-to-use-mina-in-the-docker)
+* [Node Performance Dashboard](#node-performance-dashboard)
+* * [Enabling Performance Dashboard in the docker-compose](#enabling-performance-dashboard-in-the-docker-compose)
+* * [Configuring Performance Dashboard](#configuring-performance-dashboard)
+* [Extra scripts (mina-snark-stopper)](#extra-scripts)
+* [Known issues](#known-issues)
+* * [Mina Sidecar](#mina-sidecar)
+* [Need help?](#still-need-a-help)
+* [References](#references)
+
+-----
+
 This project was born due to desire to have a quick and easy mina daemon installation way and make a mina node launch as easy as possible. [The official documentation](https://minaprotocol.com/docs/connecting) is clear for technicians, but sometimes it's a bit hard to figure out for those who never worked with Linux and Docker what to do there.
 
 Since Mina engineers provided a docker build of all Mina's parts, we'll make the installation as easy as pie.  The docker-compose in this repo contains everything that need to run Mina daemon successfully with no pain.
@@ -67,7 +85,7 @@ chmod +x /usr/local/bin/docker-compose
 ```
 Note: currently the most recent version of docker-compose is 1.28.5. Later it may become updated. However, provided docker-compose.yml is fine with current version.
 
-## Mina installation
+## Mina node installation
 
 Assuming you're going to store your docker-compose project in the folder `/docker/mina`, run the next commands:
 
@@ -209,11 +227,28 @@ The Dashboard contains three additional docker images: `Prometheus`, `Node Expor
 ```
 COMPOSE_PROFILES=mainnet,dashboard
 ```
-One more important step is setup correct permissions on the folder for Grafana database:
+Make sure that `mainnet` container is running with flag `--metrics-port 6060`. Check `DAEMON_OPTS_MAINNET` in the `m.conf.example` for reference. 
+
+-----
+
+**PLEASE, NOTE:** if you're already running `mainnet` (mina daemon) container without flag `--metrics-port`, your changes made in the `DAEMON_OPTS_MAINNET` variable will cause `mainnet` container restart on `docker-compose up -d`. If your mina daemon uptime is on top for you, then probably it would be good idea to delay the Dashboard setup until the next planed server maintenance or restart.
+
+-----
+
+Also, make sure that your `m.conf` configuration files contains:
+
+```
+PROMETHEUS_PORT=9090
+GRAFANA_PORT=3000
+```
+See `m.conf.example` for reference.
+
+Important step is to setup correct permissions on the folder for Grafana database:
 
 ```
 chmod 777 ./db/grafana
 ```
+
 That's all what you have to change to run the Dashboard successfully for your Mina node. However, if you want to play with extra vars, you can take a look to the prometheus configuration file, located in `./etc/dashboard/prometheus-mina.yml`.
 
 Update your docker-compose to launch Dashboard services:
