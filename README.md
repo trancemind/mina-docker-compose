@@ -1,4 +1,11 @@
-# minaprotocol | daemon, archiver, database, sidecar + extra tools All-In-One
+# minaprotocol docker-compose bundle All-In-One
+
+- Mina protocol nodes (mainnet, devnet)
+- Mina archive nodes
+- PostgreSQL database
+- Sidecar (for mainnet only)
+- [Snark Worker start/stop script](https://github.com/c29r3/mina-snark-stopper)
+- [Performance Dashboard](https://github.com/dsrvlabs/mina-performance-dashboard)
 
 Project URL: [mina.run](https://mina.run/)
 
@@ -30,9 +37,9 @@ As stated [in the official documentation](https://minaprotocol.com/docs/getting-
 
 It could be simple VPS/VDS obtained from Google Cloud, DigitalOcean, Vultr, etc. Of course, we can run Mina on our MacBook, Windows PC, but I wouldn't recommend to use your own working laptop or desktop station for such purpose. Mina node must be available online 24/7 to be able produce blocks or sell snarks uninterruptedly. I believe the only use case to use your working laptop/computer for Mina - is a "cold wallet".
 
-This docker-compose package designed to be launched in the Linux or any other \*nix like box.
+This docker-compose bundle designed to be launched in the Linux or any other \*nix like box.
 
-For the docker installation you can select any Linux distribution, although this docker-compose package created and tested using Docker in **Debian 10.x Linux**.
+For the docker installation you can select any Linux distribution, although the docker-compose bundle created and tested using Docker in **Debian 10.x Linux**.
 
 To continue, we assume that you have obtained a Linux server, you're connected to the server ssh terminal and you have root privileges. Also, you should have your server public IP address. You may have existing Mina wallet, or you can create new one.
 
@@ -185,6 +192,95 @@ mina client set-snark-work-fee 2.000000000
 and so on.
 
 ----
+## Node Performance Dashboard
+
+Developed by [DSRVLabs](https://www.dsrvlabs.com/en/)
+
+Original repo: https://github.com/dsrvlabs/mina-performance-dashboard
+
+> Mina Performance Dashboard is a performance monitoring tool for Mina Protocol. It provides two functions, collecting and visualizing Block Producers' and Snarkers' performance data.
+
+It also helps to monitor basic metrics of your server and detect any possible bottlenecks in time being.
+
+### Enabling Performance Dashboard in the docker-compose
+
+The Dashboard contains three additional docker images: `Prometheus`, `Node Exporter` and `Grafana`. It's disabled by default in the `m.conf` configuration file. In order to enable, there is need to add another profile, named `dashboard`, to the `COMPOSE_PROFILES` variable. It may look like this:
+
+```
+COMPOSE_PROFILES=mainnet,dashboard
+```
+One more important step is setup correct permissions on the folder for Grafana database:
+
+```
+chmod 777 ./db/grafana
+```
+That's all what you have to change to run the Dashboard successfully for your Mina node. However, if you want to play with extra vars, you can take a look to the prometheus configuration file, located in `./etc/dashboard/prometheus-mina.yml`.
+
+Update your docker-compose to launch Dashboard services:
+
+```
+cd /docker/mina
+docker-compose up -d
+```
+Once all new containers deployed and launched, check logs to make sure that everything is running smoothly:
+
+```
+docker-compose ps
+docker-compose logs --tail=30 prometheus
+docker-compose logs --tail=30 node_exporter
+docker-compose logs --tail=30 grafana
+```
+Check your access to the Grafana web interface. Follow by URL: `http://YOU_SERVER_IP_ADDRESS:3000/` You should get Grafana's login screen. 
+
+> You can login to Grafana with username admin and default password admin. After you connect to Grafana for the first time, you will see a screen to set new password for your account.
+
+### Configuring Performance Dashboard
+
+You have to configure your Grafana to get a metrics Dashboard. The configuration has two steps: adding data source and dashboard template import.
+
+Add new datasource of type "Prometheus". Go to `Configuration > Data Sources > Add data source > Prometheus`. Set:
+
+- Name: `mainnet`
+- URL: `http://prometheus.local:9090`
+- Access: `Server (default)`
+
+<p align="center"><img width="629" alt="dashboard_figure_01" src="https://user-images.githubusercontent.com/80857349/111788085-5a044c80-88c8-11eb-9a22-95e2c87f688f.png"></p>
+
+Click `Save and Test`
+
+If the datasource configured correctly, you should get response:
+
+<p align="center"><img width="363" alt="dashboard_figure_02" src="https://user-images.githubusercontent.com/80857349/111788092-5b357980-88c8-11eb-849b-b0cb04aa2cc0.png"></p>
+
+Next, you should add a dashboard from JSON template. Go to `Create > Import` menu item:
+
+<p align="center"><img width="230" alt="dashboard_figure_03" src="https://user-images.githubusercontent.com/80857349/111788094-5bce1000-88c8-11eb-8c95-5affc22d9043.png"></p>
+
+You can import the Dashboard template easily by entering Dashboard ID in the Grafana repository.
+
+The ID is `12840`. Type it and click `Load`.
+
+<p align="center"><img width="705" alt="dashboard_figure_04" src="https://user-images.githubusercontent.com/80857349/111788097-5bce1000-88c8-11eb-87ec-fc5a67d8d524.png"></p>
+
+Alternatively, you can downlod JSON file from https://github.com/dsrvlabs/mina-performance-dashboard/blob/master/grafana-json-model.json and upload to Grafana.
+
+Once Dashboard config loaded in your Grafana, you have to import it.
+
+<p align="center"><img width="697" alt="dashboard_figure_05" src="https://user-images.githubusercontent.com/80857349/111788100-5c66a680-88c8-11eb-91ad-54a58f2d7c09.png"></p>
+
+Select:
+- `Folder` -> General
+- `Prometheus-Coda` -> mainnet (or another name you selected for datasource)
+
+Click `Import` and the Dashboard will be become on your screen.
+
+You can change advanced settings through the web interface. Once you're all set, click `Save` icon in the top-right.
+
+<p align="center"><img width="223" alt="dashboard_figure_06" src="https://user-images.githubusercontent.com/80857349/111788104-5cff3d00-88c8-11eb-86e5-8975b641df37.png"></p>
+
+In few minutes you should see some data arrived from the datasource to Grafana Dashboard.
+
+----
 ## Extra scripts
 
 **[mina-snark-stopper](https://github.com/c29r3/mina-snark-stopper)** - useful script, created by [Staketab.com](https://staketab.com), purposed to stop and start snark worker when needed.
@@ -219,9 +315,10 @@ Finally, create empty log file:
 ```
 touch logs/snark_stopper.log && chmod 666 logs/snark_stopper.log
 ```
-Run mina-snark-stopper:
+Update your docker-compose to launch mina-snark-stopper:
 
 ```
+cd /docker/mina
 docker-compose up -d
 ```
 Check container logs after launch:
@@ -306,10 +403,12 @@ If you faced with any problem while running this docker-compose, you can ping me
 - [Connect to the Network](https://minaprotocol.com/docs/connecting)
 - [Archive Node](https://minaprotocol.com/docs/advanced/archive-node)
 - [Node Status Reporting](https://minaprotocol.com/docs/advanced/node-status)
+- [Mina snark-worker start/stop script](https://github.com/c29r3/mina-snark-stopper)
+- [Performance Dashboard](https://github.com/dsrvlabs/mina-performance-dashboard)
 
 ## Donate
 
-If you found this project helpful and this docker-compose package has saved a lot hours for you, please, consider some Mina donations for the author. You can just send few minas to:
+If you found this project helpful and this docker-compose bundle has saved a lot hours for you, please, consider some Mina donations for the author. You can just send few minas to:
 
 `B62qrQ4m3KNeNBsC86AW1vyXxEs32NbG2pDA2mdvCq5erxLqftVyZTj`
 
