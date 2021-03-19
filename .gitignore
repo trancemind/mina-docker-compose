@@ -9,7 +9,7 @@ m.conf
 /.mina-config/mainnet/*
 !/.mina-config/devnet/.keep
 !/.mina-config/mainnet/.keep
-/db/*
+/db/grafana/*
 !/db/grafana/.keep
 /etc/postgresql/*
 !/etc/postgresql/.keep
