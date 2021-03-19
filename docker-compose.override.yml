@@ -1,0 +1,75 @@
+#
+# mina protocol docker-compose additional config for performance dashboard
+# Check https://github.com/dsrvlabs/mina-performance-dashboard for more info
+#
+
+version: '3.9'
+services:
+
+  prometheus:
+    profiles: ["dashboard"]
+    image: prom/prometheus
+    environment:
+      - SERVER_HOSTNAME=${SERVER_HOSTNAME}
+    volumes:
+      - ./etc/dashboard/prometheus-mina.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "${MINA_BIND:-127.0.0.1}:${PROMETHEUS_PORT:-9090}:${PROMETHEUS_PORT:-9090}"
+    restart: always
+    logging:
+      options:
+        max-size: ${MINA_LOG_MAX_SIZE:-4m}
+        max-file: ${MINA_LOG_MAX_FILE:-10}
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=${SYSCTL_IPV6_DISABLED:-0}
+    networks:
+      m_net:
+        aliases:
+          - prometheus
+          - prometheus.local
+
+  node_exporter:
+    profiles: ["dashboard"]
+    image: quay.io/prometheus/node-exporter:latest
+    command:
+      - '--path.rootfs=/host'
+    volumes:
+      - '/:/host:ro,rslave'
+    ports:
+      - "127.0.0.1:9100:9100"
+    pid: host
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: ${MINA_LOG_MAX_SIZE:-4m}
+        max-file: ${MINA_LOG_MAX_FILE:-10}
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=${SYSCTL_IPV6_DISABLED:-0}
+    networks:
+      m_net:
+        aliases:
+          - n-exporter
+          - n-exporter.local
+
+  grafana:
+    profiles: ["dashboard"]
+    image: grafana/grafana
+    environment:
+      - GF_INSTALL_PLUGINS=fifemon-graphql-datasource
+      - SERVER_HOSTNAME=${SERVER_HOSTNAME}
+    volumes:
+      - ./db/grafana:/var/lib/grafana:rw
+    ports:
+      - "${MINA_BIND:-0.0.0.0}:${GRAFANA_PORT:-3000}:3000"
+    restart: always
+    logging:
+      options:
+        max-size: ${MINA_LOG_MAX_SIZE:-4m}
+        max-file: ${MINA_LOG_MAX_FILE:-10}
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=${SYSCTL_IPV6_DISABLED:-0}
+    networks:
+      m_net:
+        aliases:
+          - grafana
+          - grafana.local

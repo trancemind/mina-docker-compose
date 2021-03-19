@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 15s     # 15s will be enough, because block of time
+  scrape_timeout:  15s
+  evaluation_interval: 15s # Evaluate alerting
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: []
+    scheme: http
+    timeout: 5s
+scrape_configs:
+  - job_name: 'mainnet'
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: ['m-main.local:6060','n-exporter.local:9100']
+        labels:
+          hostname: 'mainnet'
