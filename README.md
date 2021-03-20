@@ -15,6 +15,12 @@ Project URL: [mina.run](https://mina.run/)
     B62qrQ4m3KNeNBsC86AW1vyXxEs32NbG2pDA2mdvCq5erxLqftVyZTj
 -----
 
+## Disclaimer
+
+The information provided is not affiliated, associated, authorized, or endorsed by [O(1)Labs](https://minaprotocol.com/about) or any of its subsidiaries or its affiliates. You should consider the repository as unoffical resource completely unrelated to O(1)Labs.
+
+----
+
 ## Table of contents
 
 * [Prerequisites](#prerequisites)
