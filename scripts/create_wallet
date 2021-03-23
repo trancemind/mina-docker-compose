@@ -28,4 +28,5 @@ echo "Generating keys for wallet '${wallet_name}'."
 docker run --interactive --tty --rm \
            --volume ${key_dir}:/keys minaprotocol/generate-keypair:${MINA_GENKEY_VERSION} \
            --privkey-path /keys/${wallet_name}
+chmod 600 "${key_dir}/${wallet_name}"
 echo "Congratulations! You have created your Mina wallet!"
