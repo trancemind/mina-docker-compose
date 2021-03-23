@@ -130,7 +130,13 @@ cd /docker/mina
 cp m.conf.example m.conf
 cp etc/mainnet/daemon.json.example etc/mainnet/daemon.json
 cp etc/devnet/daemon.json.example etc/devnet/daemon.json # If you going to use devnet container
-chmod 700 keys/ # This is important
+```
+
+Make sure that your key folder and your wallet private key is a user-accessible only! **This is important!**
+
+```
+chmod 700 keys/
+chmod 600 keys/my-wallet
 ```
 
 Open `m.conf` config file using editor, e,g:
