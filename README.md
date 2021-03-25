@@ -396,7 +396,14 @@ mainnet_snark_stopper_1  | |2021-03-18 23:08:08,842| 🙀 No proposal in this ep
 
 > The upgrading process is causing mina daemon container restart, however, this is very important to keep your mina daemon at the most recent version to avoid known bugs and possible security issues. Do not neglect the upgrade if available.
 
-In order to upgrade your currently running mina docker-compose installation you should edit your `m.conf` configuration file and replace image versions. See most recent version of `m.conf.example` file.
+In order to upgrade your currently running mina docker-compose installation, at first, you should get the most recent changes from the repo:
+
+```
+cd /docker/mina
+git pull
+```
+
+Once done, edit your `m.conf` configuration file and replace image versions. See examples from the most recent version of `m.conf.example` file.
 
 Commonly, it would have to compare (and replace by need):
 
