@@ -32,6 +32,7 @@ The information provided is not affiliated, associated, authorized, or endorsed 
 * * [Enabling Performance Dashboard in the docker-compose](#enabling-performance-dashboard-in-the-docker-compose)
 * * [Configuring Performance Dashboard](#configuring-performance-dashboard)
 * [Extra scripts (mina-snark-stopper)](#extra-scripts)
+* [Upgrading](#upgrading)
 * [Known issues](#known-issues)
 * * [Mina Sidecar](#mina-sidecar)
 * [Need help?](#still-need-a-help)
@@ -388,6 +389,29 @@ mainnet_snark_stopper_1  | http://staketab.com/
 mainnet_snark_stopper_1  |
 mainnet_snark_stopper_1  | |2021-03-18 23:08:08,842| 🙀 No proposal in this epoch
 ```
+
+## Upgrading
+
+##### Warning:
+
+> The upgrading process is causing mina daemon container restart, however, this is very important to keep your mina daemon at the most recent version to avoid known bugs and possible security issues. Do not neglect the upgrade if available.
+
+In order to upgrade your currently running mina docker-compose installation you should edit your `m.conf` configuration file and replace image versions. See most recent version of `m.conf.example` file.
+
+Commonly, it would have to compare (and replace by need):
+
+- `MINA_TAG_MAIN` - latest version tag is **1.1.4-a8893ab**
+- `MINA_TAG_DEV` - latest version tag is **1.0.5-68200c7**; (required, if you're running mina devnet container) 
+- `MINA_TAG_ARCH` - latest version tag is **1.1.3-48401e9**; (required, if you're running mina archive container)
+
+Once you've done with `m.conf` modifications, save the file and then pull new docker images, upgrade and restart your containers:
+
+```
+cd /docker/mina
+docker-compose pull
+docker-compose up -d
+```
+Check containers logs and `mina client status` to make sure that everything restarted successfully.
 
 ## Known issues
 
