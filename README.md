@@ -452,6 +452,7 @@ If you faced with any problem while running this docker-compose, you can ping me
 - [Node Status Reporting](https://minaprotocol.com/docs/advanced/node-status)
 - [Mina snark-worker start/stop script](https://github.com/c29r3/mina-snark-stopper)
 - [Performance Dashboard](https://github.com/dsrvlabs/mina-performance-dashboard)
+- [Learn more about Mina with "Awesome Mina"](https://github.com/nerdvibe/awesome-mina)
 
 ## Donate
 
@@ -463,4 +464,4 @@ It would be an excellent incentive for the author to continue this project.
 
 -----
 
-Last updated: 2021-03-19
+Last updated: 2021-03-25
