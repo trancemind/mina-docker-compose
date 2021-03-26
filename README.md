@@ -49,7 +49,8 @@ Using provided `docker-compose.yml` it's possible to launch:
 - two `mina daemon` different containers for `mainnet` and `devnet` separately using different daemon port bindings (devnet disabled by default);
 - two `mina archive` containers (for `mainnet` and `devnet` containers);
 - postgresql container to be used by `mina archive` containers as a database server;
-- and the `mina sidecar` to collect and send out node uptime stats.
+- `mina sidecar` to collect and send out node uptime stats;
+- there is also included "mina-snark-stopper" script and "Node Performance Dashboard".
 
 Note: for both networks (mainnet and devnet) there is used same wallet (key file) being used in the folder `keys/`. If need, to use different keys, it's possible to separate the `keys/` folder, e.g.: `keys/devnet/` and `keys/mainnet/`.
 
@@ -72,6 +73,19 @@ On the first stage, if your server has no installed **docker** and **docker-comp
 
 If you're connected to the server ssh terminal as regular (non-root) user, then become root with `sudo -i` and then proceed.
 
+Install required packages `git` and `curl`:
+
+For Debian/Ubuntu Linux:
+
+```
+apt -y install curl git
+```
+For CentOS/RedHat Linux:
+
+```
+yum -y install curl git
+```
+
 ## Docker installation
 
 Run these commands from terminal in order to install Docker:
@@ -87,10 +101,10 @@ systemctl start docker.service
 Run these commands from terminal in order to install Docker-compose:
 
 ```
-curl -sL https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m) > /usr/local/bin/docker-compose
+curl -sL https://github.com/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m) > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 ```
-Note: currently the most recent version of docker-compose is 1.28.5. Later it may become updated. However, provided docker-compose.yml is fine with current version.
+Note: currently the most recent version of docker-compose is **1.28.6**. Later it may become updated. However, provided docker-compose.yml is fine with current version.
 
 ## Mina node installation
 
@@ -100,19 +114,6 @@ Assuming you're going to store your docker-compose project in the folder `/docke
 mkdir /docker
 git clone https://github.com/trancemind/mina-docker-compose /docker/mina
 ```
-If you don't have installed `git` utility, you should install it first.
-
-For Debian/Ubuntu Linux:
-
-```
-apt -y install git
-```
-For CentOS/RedHat Linux:
-
-```
-yum -y install git
-```
-
 Before to start Mina daemon, make sure that your have created a mina wallet and so you have a public/private key pair in the folder `keys/`.
 
 You can use a `create_wallet` script from the `scripts/` folder to generate a new wallet. Simply launch it in the terminal:
@@ -506,4 +507,4 @@ It would be an excellent incentive for the author to continue this project.
 
 -----
 
-Last updated: 2021-03-25
+Last updated: 2021-03-26
