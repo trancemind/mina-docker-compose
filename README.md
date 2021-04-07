@@ -419,7 +419,7 @@ Once done, edit your `m.conf` configuration file and replace image versions. See
 
 Commonly, it would have to compare (and replace by need):
 
-- `MINA_TAG_MAIN` - latest version tag is **1.1.4-a8893ab**
+- `MINA_TAG_MAIN` - latest version tag is **1.1.5-a42bdee**
 - `MINA_TAG_DEV` - latest version tag is **1.0.5-68200c7**; (required, if you're running mina devnet container) 
 - `MINA_TAG_ARCH` - latest version tag is **1.1.3-48401e9**; (required, if you're running mina archive container)
 
