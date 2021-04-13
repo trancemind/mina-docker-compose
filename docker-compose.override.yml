@@ -13,6 +13,7 @@ services:
       - SERVER_HOSTNAME=${SERVER_HOSTNAME}
     volumes:
       - ./etc/dashboard/prometheus-mina.yml:/etc/prometheus/prometheus.yml:ro
+      - ./etc/dashboard/prometheus:/prometheus:rw
     ports:
       - "${MINA_BIND:-127.0.0.1}:${PROMETHEUS_PORT:-9090}:${PROMETHEUS_PORT:-9090}"
     restart: always
