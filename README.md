@@ -257,10 +257,10 @@ GRAFANA_PORT=3000
 ```
 See `m.conf.example` for reference.
 
-Important step is to setup correct permissions on the folder for Grafana database:
+Important step is to setup correct permissions on the folder for Grafana and Prometheus database:
 
 ```
-chmod 777 ./db/grafana
+chmod 777 ./db/grafana ./db/prometheus
 ```
 
 That's all what you have to change to run the Dashboard successfully for your Mina node. However, if you want to play with extra vars, you can take a look to the prometheus configuration file, located in `./etc/dashboard/prometheus-mina.yml`.
@@ -420,8 +420,8 @@ Once done, edit your `m.conf` configuration file and replace image versions. See
 Commonly, it would have to compare (and replace by need):
 
 - `MINA_TAG_MAIN` - latest version tag is **1.1.5-a42bdee**
+- `MINA_TAG_ARCH` - latest version tag is **1.1.5-a42bdee**; (required, if you're running mina archive container)
 - `MINA_TAG_DEV` - latest version tag is **1.0.5-68200c7**; (required, if you're running mina devnet container) 
-- `MINA_TAG_ARCH` - latest version tag is **1.1.3-48401e9**; (required, if you're running mina archive container)
 
 Once you've done with `m.conf` modifications, save the file and then pull new docker images, upgrade and restart your containers:
 
@@ -507,4 +507,4 @@ It would be an excellent incentive for the author to continue this project.
 
 -----
 
-Last update: 2021-04-07
+Last update: 2021-04-24
