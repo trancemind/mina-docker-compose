@@ -11,7 +11,7 @@ LOG_LEVEL=Info                                                                  
 
 MINA_TAG_DEV=1.0.5-68200c7                                                                        # ## Change version tags once the software got updates
 MINA_TAG_MAIN=1.1.5-a42bdee                                                                       # Ref: https://hub.docker.com/r/minaprotocol/mina-archive/tags?page=1&ordering=last_updated
-MINA_TAG_ARCH=1.1.3-48401e9                                                                       # ##
+MINA_TAG_ARCH=1.1.5-a42bdee                                                                       # ##
 
 MINA_PUBLIC_KEY=[YOUR_PUBLIC_KEY_HERE]                                                  ### SETUP YOUR MINA PUBLIC KEY
 MINA_PRIVKEY_PASS=[YOUR_PRIVATE_KEY_PASSWORD_DONT_USE_SPECIAL_CHARS]                    ### SETUP PASSWORD FOR YOUR MINA PRIVATE KEY
