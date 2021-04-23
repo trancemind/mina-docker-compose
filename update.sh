@@ -10,7 +10,7 @@ compose_file="${wdir}/docker-compose.yml"
 delay="15"
 
 MINA_TAG_MAIN="1.1.5-a42bdee"
-MINA_TAG_ARCH="1.1.3-48401e9"
+MINA_TAG_ARCH="1.1.5-a42bdee"
 MINA_TAG_DEV="1.0.5-68200c7"
 
 # Checking if the m.conf file exists
