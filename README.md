@@ -35,7 +35,6 @@ The information provided is not affiliated, associated, authorized, or endorsed 
 * [Upgrading](#upgrading)
 * [Known issues](#known-issues)
 * * [Mina Sidecar](#mina-sidecar)
-* [Need help?](#still-need-a-help)
 * [References](#references)
 
 -----
@@ -422,6 +421,7 @@ Commonly, it would have to compare (and replace by need):
 - `MINA_TAG_MAIN` - latest version tag is **1.1.5-a42bdee**
 - `MINA_TAG_ARCH` - latest version tag is **1.1.5-a42bdee**; (required, if you're running mina archive container)
 - `MINA_TAG_DEV` - latest version tag is **1.0.5-68200c7**; (required, if you're running mina devnet container) 
+- Latest Mina Sidecar version: **[1.1.6-386c5ac](https://hub.docker.com/r/minaprotocol/mina-bp-stats-sidecar/tags)**
 
 Once you've done with `m.conf` modifications, save the file and then pull new docker images, upgrade and restart your containers:
 
@@ -483,10 +483,6 @@ mainnet_sidecar_1  | INFO:root:Finished! New tip 517...
 ```
 This meaning your sidecar is working successfully.
 
-## Still need a help?
-
-If you faced with any problem while running this docker-compose, you can ping me in the [Mina Discord](https://bit.ly/MinaDiscord) by ID: `MaxTM#6793` and I'll try to help you to sort it out. Additionally, you can request for a help with Linux server initial setup for Mina node.
-
 ## References
 
 - [Keypair generation](https://minaprotocol.com/docs/keypair)
@@ -507,4 +503,4 @@ It would be an excellent incentive for the author to continue this project.
 
 -----
 
-Last update: 2021-04-24
+Last update: 2021-05-22
