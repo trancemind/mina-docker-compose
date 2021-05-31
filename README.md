@@ -100,10 +100,10 @@ systemctl start docker.service
 Run these commands from terminal in order to install Docker-compose:
 
 ```
-curl -sL https://github.com/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m) > /usr/local/bin/docker-compose
+curl -sL https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 ```
-Note: currently the most recent version of docker-compose is **1.28.6**. Later it may become updated. However, provided docker-compose.yml is fine with current version.
+Note: currently the most recent version of docker-compose is **1.29.2**. Later it may become updated. However, provided docker-compose.yml is fine with current version.
 
 ## Mina node installation
 
@@ -503,4 +503,4 @@ It would be an excellent incentive for the author to continue this project.
 
 -----
 
-Last update: 2021-05-22
+Last update: 2021-05-31
