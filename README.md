@@ -1,6 +1,6 @@
 # minaprotocol docker-compose bundle All-In-One
 
-- Mina protocol nodes (mainnet, devnet)
+- Mina protocol nodes
 - Mina archive nodes
 - PostgreSQL database
 - Sidecar (for mainnet only)
@@ -45,13 +45,11 @@ Since Mina engineers provided a docker build of all Mina's parts, we'll make the
 
 Using provided `docker-compose.yml` it's possible to launch: 
 
-- two `mina daemon` different containers for `mainnet` and `devnet` separately using different daemon port bindings (devnet disabled by default);
-- two `mina archive` containers (for `mainnet` and `devnet` containers);
+- `mina daemon` container for `mainnet` (devnet option removed 2021-10-18);
+- `mina archive` container;
 - postgresql container to be used by `mina archive` containers as a database server;
 - `mina sidecar` to collect and send out node uptime stats;
 - there is also included "mina-snark-stopper" script and "Node Performance Dashboard".
-
-Note: for both networks (mainnet and devnet) there is used same wallet (key file) being used in the folder `keys/`. If need, to use different keys, it's possible to separate the `keys/` folder, e.g.: `keys/devnet/` and `keys/mainnet/`.
 
 ## Prerequisites
 
@@ -130,7 +128,6 @@ Next, create docker-compose environment config file, using provided example. Jus
 cd /docker/mina
 cp m.conf.example m.conf
 cp etc/mainnet/daemon.json.example etc/mainnet/daemon.json
-cp etc/devnet/daemon.json.example etc/devnet/daemon.json # If you going to use devnet container
 ```
 
 Make sure that your key folder and your wallet private key is a user-accessible only! **This is important!**
@@ -418,9 +415,8 @@ Once done, edit your `m.conf` configuration file and replace image versions. See
 
 Commonly, it would have to compare (and replace by need):
 
-- `MINA_TAG_MAIN` - latest version tag is **1.1.5-a42bdee**
-- `MINA_TAG_ARCH` - latest version tag is **1.1.5-a42bdee**; (required, if you're running mina archive container)
-- `MINA_TAG_DEV` - latest version tag is **1.0.5-68200c7**; (required, if you're running mina devnet container) 
+- `MINA_TAG_MAIN` - latest version tag is **1.1.8-b10c0e3-mainnet**
+- `MINA_TAG_ARCH` - latest version tag is **1.1.8-b10c0e3**; (required, if you're running mina archive container)
 - Latest Mina Sidecar version: **[1.1.6-386c5ac](https://hub.docker.com/r/minaprotocol/mina-bp-stats-sidecar/tags)**
 
 Once you've done with `m.conf` modifications, save the file and then pull new docker images, upgrade and restart your containers:
@@ -503,4 +499,4 @@ It would be an excellent incentive for the author to continue this project.
 
 -----
 
-Last update: 2021-05-31
+Last update: 2021-10-19
