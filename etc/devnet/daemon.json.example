@@ -1,8 +1,0 @@
-{
-  "daemon": {
-    "log-block-creation":       true,
-    "log-snark-work-gossip":    true,
-    "log-txn-pool-gossip":      true,
-    "log-precomputed-blocks":   true
-  }
-}

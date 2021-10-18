@@ -7,7 +7,7 @@ services:
 
   mainnet:
     profiles: ["mainnet"]
-    image: minaprotocol/mina-daemon-baked:${MINA_TAG_MAIN}
+    image: ${REPO_URL}/mina-daemon-baked:${MINA_TAG_MAIN}
     command: daemon ${DAEMON_OPTS_MAINNET}
     environment:
       - CODA_PRIVKEY_PASS=${MINA_PRIVKEY_PASS}
@@ -37,8 +37,8 @@ services:
     profiles: ["mainnet-archive"]
     depends_on:
       - db
-    image: minaprotocol/mina-archive:${MINA_TAG_ARCH}
-    command: run ${DAEMON_OPTS_MAINNET_ARCHIVE}
+    image: ${REPO_URL}/mina-archive:${MINA_TAG_ARCH}
+    command: coda-archive run ${DAEMON_OPTS_MAINNET_ARCHIVE}
     environment:
       - SERVER_HOSTNAME=${SERVER_HOSTNAME}
       - IPV4_NETWORK=${IPV4_NETWORK:-172.25.0}
@@ -55,62 +55,11 @@ services:
           - archive-mainnet
           - archive-mainnet.local
 
-  devnet:
-    profiles: ["devnet"]
-    image: minaprotocol/mina-daemon-baked:${MINA_TAG_DEV}
-    command: daemon ${DAEMON_OPTS_DEVNET}
-    environment:
-      - CODA_PRIVKEY_PASS=${MINA_PRIVKEY_PASS}
-      - MINA_PUBLIC_KEY=${MINA_PUBLIC_KEY}
-      - SERVER_HOSTNAME=${SERVER_HOSTNAME}
-      - IPV4_NETWORK=${IPV4_NETWORK:-172.25.0}
-    volumes:
-      - ./keys:/keys:ro
-      - ./.mina-config/devnet/:/root/.mina-config:rw
-      - ./etc/devnet/daemon.json:/root/.mina-config/daemon.json:ro
-    ports:
-      - "${MINA_BIND:-0.0.0.0}:${MINA_PORT_DEV:-18302}:${MINA_PORT_DEV:-18302}"
-    restart: always
-    logging:
-      options:
-        max-size: ${MINA_LOG_MAX_SIZE:-4m}
-        max-file: ${MINA_LOG_MAX_FILE:-10}
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=${SYSCTL_IPV6_DISABLED:-0}
-    networks:
-      m_net:
-        aliases:
-          - m-dev
-          - m-dev.local
-
-  devnet_archive:
-    profiles: ["devnet-archive"]
-    depends_on:
-      - db
-    image: minaprotocol/mina-archive:${MINA_TAG_ARCH}
-    command: run ${DAEMON_OPTS_DEVNET_ARCHIVE}
-    environment:
-      - SERVER_HOSTNAME=${SERVER_HOSTNAME}
-      - IPV4_NETWORK=${IPV4_NETWORK:-172.25.0}
-    restart: always
-    logging:
-      options:
-        max-size: ${MINA_LOG_MAX_SIZE:-4m}
-        max-file: ${MINA_LOG_MAX_FILE:-10}
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=${SYSCTL_IPV6_DISABLED:-0}
-    networks:
-      m_net:
-        aliases:
-          - archive-devnet
-          - archive-devnet.local
-
   db:
-    profiles: ["database"]
+    profiles: ["mainnet-archive"]
     image: postgres:12.6
     volumes:
       - ./etc/init/init_mina_archive_mainnet.sql:/docker-entrypoint-initdb.d/init_mina_archive_mainnet.sql
-      - ./etc/init/init_mina_archive_devnet.sql:/docker-entrypoint-initdb.d/init_mina_archive_devnet.sql
       - ./db/postgresql/:/var/lib/postgresql/data/:rw
       - ./etc/postgresql/:/etc/postgresql/conf.d:ro
     environment:

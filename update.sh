@@ -9,9 +9,8 @@ conf_file="${wdir}/m.conf"
 compose_file="${wdir}/docker-compose.yml"
 delay="15"
 
-MINA_TAG_MAIN="1.1.5-a42bdee"
-MINA_TAG_ARCH="1.1.5-a42bdee"
-MINA_TAG_DEV="1.0.5-68200c7"
+MINA_TAG_MAIN="1.1.8-b10c0e3-mainnet"
+MINA_TAG_ARCH="1.1.8-b10c0e3"
 
 # Checking if the m.conf file exists
 if ! [[ -f ${conf_file} ]]; then
@@ -37,7 +36,6 @@ sleep ${delay}
 # Setting up recent TAGs for docker images
 sed -i "s/^\(MINA_TAG_MAIN\s*=\s*\).*\$/\1${MINA_TAG_MAIN}/" "${conf_file}"
 sed -i "s/^\(MINA_TAG_ARCH\s*=\s*\).*\$/\1${MINA_TAG_ARCH}/" "${conf_file}"
-sed -i "s/^\(MINA_TAG_DEV\s*=\s*\).*\$/\1${MINA_TAG_DEV}/" "${conf_file}"
 
 # Upgrading/restarting existing containers
 docker-compose up -d

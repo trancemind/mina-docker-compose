@@ -1,7 +1,3 @@
-CREATE DATABASE mina_archive_mainnet;
-
-\c mina_archive_mainnet;
-
 CREATE TABLE public_keys
 ( id    serial PRIMARY KEY
 , value text   NOT NULL UNIQUE
@@ -118,4 +114,3 @@ CREATE TABLE blocks_internal_commands
 , receiver_balance      int NOT NULL REFERENCES balances(id) ON DELETE CASCADE
 , PRIMARY KEY (block_id, internal_command_id, sequence_no, secondary_sequence_no)
 );
-
