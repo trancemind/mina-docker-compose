@@ -500,3 +500,8 @@ It would be an excellent incentive for the author to continue this project.
 -----
 
 Last update: 2021-10-19
+
+
+### Infrastructure model
+
+![Infrastructure model](.infragenie/infrastructure_model.png)
